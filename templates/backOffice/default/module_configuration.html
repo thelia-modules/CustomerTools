@@ -1,0 +1,39 @@
+<div class="general-block-decorator">
+    <div class="row">
+
+        <div class="col-md-12 title title-without-tabs">
+            {intl l='customertools.title' d='customertools.bo.default'}
+        </div>
+
+        <div class="form-container">
+            <div class="col-md-12">
+                {form name="delete_customer_without_order_form"}
+                <form method="POST" action="{url path="/admin/module/CustomerTools/deletecustomerwithoutorder"}" {form_enctype} >
+
+                    {render_form_field field="success_url" value={url path='/admin/module/CustomerTools'}}
+                    {render_form_field field="error_url" value={url path='/admin/module/CustomerTools'}}
+                    {form_hidden_fields }
+
+                    {if $form_error}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-danger">{$form_error_message}</div>
+                            </div>
+                        </div>
+                    {/if}
+
+                    <div class="col-md-4">
+                        {render_form_field field='start_date'}
+                    </div>
+                    <div class="col-md-4">
+                        {render_form_field field='end_date'}
+                    </div>
+                    <div class="form-group col-md-4 ">
+                        <button type="submit" class="btn btn-danger" >{intl l="Delete Customer without order" d="customertools.bo.default"}</button>
+                    </div>
+                </form>
+                {/form}
+            </div>
+        </div>
+    </div>
+</div>
