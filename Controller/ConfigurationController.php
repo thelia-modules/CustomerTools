@@ -19,10 +19,13 @@ class ConfigurationController extends BaseAdminController
 
         $form = $this->createForm('delete_customer_without_order_form');
 
+
         try {
             $data = $this->validateForm($form)->getData();
-
-            if ($data['start_date'] < $data['end_date']) {
+            if (is_null($data['start_date']) || is_null($data['end_date'])){
+                throw new \Exception("Error : date null");
+            }
+            if ($data['start_date'] < $data['end_date'] ) {
 
                 CustomerQuery::create()
                     ->leftJoinOrder()
@@ -34,7 +37,7 @@ class ConfigurationController extends BaseAdminController
 
                 return $this->generateSuccessRedirect($form);
             }
-            $error_message = "Error : " . $data['start_date']->format('d/m/Y') . " > " . $data['end_date']->format('d/m/Y');
+            throw new \Exception("Error : " . $data['start_date']->format('d/m/Y') . " > " . $data['end_date']->format('d/m/Y'));
         } catch (FormValidationException $e){
             $error_message = $this->createStandardFormValidationErrorMessage($e);
         } catch (\Exception $e){
