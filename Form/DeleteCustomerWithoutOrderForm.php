@@ -4,6 +4,7 @@ namespace CustomerTools\Form;
 
 use CustomerTools\CustomerTools;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
 
@@ -19,7 +20,8 @@ class DeleteCustomerWithoutOrderForm extends BaseForm
         'start_date',
         DateType::class,
         [
-            'required'    => false,
+            'required'    => true,
+            'constraints' => new NotBlank(),
             'label'       => Translator::getInstance()->trans('start_date', [], CustomerTools::DOMAIN_NAME),
             'label_attr'  => [
                 'for'         => 'start_date',
@@ -36,7 +38,8 @@ class DeleteCustomerWithoutOrderForm extends BaseForm
             'end_date',
             DateType::class,
             [
-                'required'    => false,
+                'required'    => true,
+                'constraints' => new NotBlank(),
                 'label'       => Translator::getInstance()->trans('end_date', [], CustomerTools::DOMAIN_NAME),
                 'label_attr'  => [
                     'for'         => 'end_date',
