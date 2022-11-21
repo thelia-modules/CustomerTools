@@ -21,6 +21,14 @@ class ConfigurationController extends BaseAdminController
         try {
             $data = $this->validateForm($form)->getData();
 
+            if (null === $data['start_date']){
+                $data['start_date'] = new \DateTime("01/01/1971");
+            }
+
+            if (null === $data['end_date']){
+                $data['end_date'] = new \DateTime("now");
+            }
+
             if ($data['start_date'] > $data['end_date']) {
                 throw new \Exception("Error : " . $data['start_date']->format('d/m/Y') . " > " . $data['end_date']->format('d/m/Y'));
             }

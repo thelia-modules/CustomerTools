@@ -20,8 +20,7 @@ class DeleteCustomerWithoutOrderForm extends BaseForm
         'start_date',
         DateType::class,
         [
-            'required'    => true,
-            'constraints' => new NotBlank(),
+            'required'    => false,
             'label'       => Translator::getInstance()->trans('start_date', [], CustomerTools::DOMAIN_NAME),
             'label_attr'  => [
                 'for'         => 'start_date',
@@ -38,8 +37,7 @@ class DeleteCustomerWithoutOrderForm extends BaseForm
             'end_date',
             DateType::class,
             [
-                'required'    => true,
-                'constraints' => new NotBlank(),
+                'required'    => false,
                 'label'       => Translator::getInstance()->trans('end_date', [], CustomerTools::DOMAIN_NAME),
                 'label_attr'  => [
                     'for'         => 'end_date',
