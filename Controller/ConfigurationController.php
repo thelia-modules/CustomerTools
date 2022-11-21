@@ -2,43 +2,39 @@
 
 namespace CustomerTools\Controller;
 
+use CustomerTools\Service\CustomerToolsService;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Form\Exception\FormValidationException;
-use Thelia\Model\CustomerQuery;
 
 class ConfigurationController extends BaseAdminController
 {
-    public function deleteCustomerWithoutOrder(){
+    public function deleteCustomerWithoutOrder()
+    {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], ["CustomerTools"], AccessManager::UPDATE)) {
             return $response;
         }
 
-        $response = null;
-
         $form = $this->createForm('delete_customer_without_order_form');
-
 
         try {
             $data = $this->validateForm($form)->getData();
 
-            if ($data['start_date'] < $data['end_date'] ) {
-
-                CustomerQuery::create()
-                    ->leftJoinOrder()
-                    ->filterByCreatedAt(array('min' => $data['start_date']))
-                    ->filterByCreatedAt(array('max' => $data['end_date']))
-                    ->where('order.id IS NULL')
-                    ->find()
-                    ->delete();
-
-                return $this->generateSuccessRedirect($form);
+            if ($data['start_date'] > $data['end_date']) {
+                throw new \Exception("Error : " . $data['start_date']->format('d/m/Y') . " > " . $data['end_date']->format('d/m/Y'));
             }
-            throw new \Exception("Error : " . $data['start_date']->format('d/m/Y') . " >= " . $data['end_date']->format('d/m/Y'));
-        } catch (FormValidationException $e){
+
+            /** @var CustomerToolsService $customerToolsService */
+            $customerToolsService = $this->getContainer()->get('action.customer.tool.service');
+
+            $customers = $customerToolsService->getCustomertoDelete($data['start_date']->format('d-m-Y'), $data['end_date']->format('d-m-Y'));
+            $customerToolsService->deleteCustomer($customers);
+
+            return $this->generateSuccessRedirect($form);
+        } catch (FormValidationException $e) {
             $error_message = $this->createStandardFormValidationErrorMessage($e);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $error_message = $e->getMessage();
         }
 
