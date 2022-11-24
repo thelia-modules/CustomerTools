@@ -7,6 +7,7 @@ use CustomerTools\Event\CustomerToolsEvents;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Collection\ObjectCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Thelia\Log\Tlog;
 use Thelia\Model\Base\Customer;
 use Thelia\Model\Base\CustomerQuery;
@@ -18,7 +19,7 @@ class CustomerToolsService
      */
     private $dispatcher;
 
-    public function __construct(EventDispatcher $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }

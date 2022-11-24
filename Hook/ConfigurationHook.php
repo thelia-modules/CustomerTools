@@ -7,8 +7,8 @@ use Thelia\Core\Hook\BaseHook;
 
 class ConfigurationHook extends BaseHook
 {
-    public function onModuleConfiguration(HookRenderEvent $event){
-
+    public function onModuleConfiguration(HookRenderEvent $event)
+    {
         $event->add($this->render("module_configuration.html"));
     }
 }
