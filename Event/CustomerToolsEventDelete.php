@@ -20,7 +20,7 @@ class CustomerToolsEventDelete extends ActionEvent
     public function __construct(Customer $customer)
     {
         $this->customer = $customer;
-        $this->isProtected = true;
+        $this->isProtected = false;
     }
 
     /**

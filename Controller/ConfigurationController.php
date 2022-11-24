@@ -21,11 +21,11 @@ class ConfigurationController extends BaseAdminController
         try {
             $data = $this->validateForm($form)->getData();
 
-            if (null === $data['start_date']){
+            if (null === $data['start_date']) {
                 $data['start_date'] = new \DateTime("01/01/1971");
             }
 
-            if (null === $data['end_date']){
+            if (null === $data['end_date']) {
                 $data['end_date'] = new \DateTime("now");
             }
 
@@ -37,9 +37,14 @@ class ConfigurationController extends BaseAdminController
             $customerToolsService = $this->getContainer()->get('action.customer.tool.service');
 
             $customers = $customerToolsService->getCustomertoDelete($data['start_date']->format('d-m-Y'), $data['end_date']->format('d-m-Y'));
-            $customerToolsService->deleteCustomer($customers);
 
-            return $this->generateSuccessRedirect($form);
+            $customerDeleteCount = $customerToolsService->deleteCustomer($customers);
+
+            $url = $this->retrieveSuccessUrl($form);
+            $url .= '?customer_count=' . $customerDeleteCount;
+
+            return $this->generateRedirect($url);
+
         } catch (FormValidationException $e) {
             $error_message = $this->createStandardFormValidationErrorMessage($e);
         } catch (\Exception $e) {
