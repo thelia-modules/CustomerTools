@@ -14,8 +14,6 @@ use Thelia\Model\Base\CustomerQuery;
 
 class CustomerToolsService
 {
-    const CUSTOMER_TOOLS_DELETE = 'action.customer.tool.service';
-
     /**
      * @var EventDispatcher
      */
