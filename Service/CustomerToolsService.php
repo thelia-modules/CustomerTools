@@ -25,19 +25,21 @@ class CustomerToolsService
 
     /**
      * @param $customer
-     * @return void
+     * @return int
      */
     public function deleteCustomer(ObjectCollection $customers)
     {
         /** @var Customer $customer */
-        foreach ($customers as $customer) {
+        foreach ($customers as $key => $customer) {
             try {
                 $event = new CustomerToolsEventDelete($customer);
                 $this->dispatcher->dispatch(CustomerToolsEvents::DELETE, $event);
 
                 if ($event->isProtected()) {
+                    unset($customers[$key]);
                     continue;
                 }
+
                 $customer->delete();
 
             } catch (\Exception $ex) {
@@ -46,6 +48,8 @@ class CustomerToolsService
                 continue;
             }
         }
+
+        return count($customers);
     }
 
     /**
