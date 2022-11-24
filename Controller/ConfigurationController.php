@@ -7,10 +7,17 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Form\Exception\FormValidationException;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/admin/module/CustomerTools", name="customer_tools")
+ */
 class ConfigurationController extends BaseAdminController
 {
-    public function deleteCustomerWithoutOrder()
+    /**
+     * @Route("/deletecustomerwithoutorder", name="delete_customer_without_order")
+     */
+    public function deleteCustomerWithoutOrder(CustomerToolsService $customerToolsService)
     {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], ["CustomerTools"], AccessManager::UPDATE)) {
             return $response;
@@ -21,20 +28,17 @@ class ConfigurationController extends BaseAdminController
         try {
             $data = $this->validateForm($form)->getData();
 
-            if (null === $data['start_date']){
+            if (null === $data['start_date']) {
                 $data['start_date'] = new \DateTime("01/01/1971");
             }
 
-            if (null === $data['end_date']){
+            if (null === $data['end_date']) {
                 $data['end_date'] = new \DateTime("now");
             }
 
             if ($data['start_date'] > $data['end_date']) {
                 throw new \Exception("Error : " . $data['start_date']->format('d/m/Y') . " > " . $data['end_date']->format('d/m/Y'));
             }
-
-            /** @var CustomerToolsService $customerToolsService */
-            $customerToolsService = $this->getContainer()->get('action.customer.tool.service');
 
             $customers = $customerToolsService->getCustomertoDelete($data['start_date']->format('d-m-Y'), $data['end_date']->format('d-m-Y'));
             $customerToolsService->deleteCustomer($customers);
