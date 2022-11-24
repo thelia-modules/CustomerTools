@@ -41,9 +41,14 @@ class ConfigurationController extends BaseAdminController
             }
 
             $customers = $customerToolsService->getCustomertoDelete($data['start_date']->format('d-m-Y'), $data['end_date']->format('d-m-Y'));
-            $customerToolsService->deleteCustomer($customers);
 
-            return $this->generateSuccessRedirect($form);
+            $customerDeleteCount = $customerToolsService->deleteCustomer($customers);
+
+            $url = $this->retrieveSuccessUrl($form);
+            $url .= '?customer_count=' . $customerDeleteCount;
+
+            return $this->generateRedirect($url);
+
         } catch (FormValidationException $e) {
             $error_message = $this->createStandardFormValidationErrorMessage($e);
         } catch (\Exception $e) {

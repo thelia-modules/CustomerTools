@@ -23,6 +23,14 @@
                         </div>
                     {/if}
 
+                    {if null !== $smarty.get.customer_count|default:null}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-warning">{intl l="Customers was delete : "}{$smarty.get.customer_count}</div>
+                            </div>
+                        </div>
+                    {/if}
+
                     <div class="col-md-4">
                         {render_form_field field='start_date'}
                     </div>
