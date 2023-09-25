@@ -9,7 +9,7 @@
     </forms>
 
     <hooks>
-        <hook id="robot.configuration.hook" class="CustomerTools\Hook\ConfigurationHook">
+        <hook id="customer.tool.configuration.hook" class="CustomerTools\Hook\ConfigurationHook">
             <tag name="hook.event_listener" event="module.configuration" type="back" method="onModuleConfiguration" />
         </hook>
     </hooks>
